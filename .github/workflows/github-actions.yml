@@ -20,9 +20,12 @@ jobs:
         run: pip install --upgrade platformio
       - name: Build PlatformIO Project
         run: pio run
+      - name: Set current date
+        run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
       - name: Archive production artifact
         uses: actions/upload-artifact@v4
         with:
+          name: ${{ env.DATE }}-firmware
           path: |
             .pio/build/esp32dev/firmware.bin
             .pio/build/esp32dev/firmware.elf
