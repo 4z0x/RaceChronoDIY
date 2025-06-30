@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/cache@v4
         with:
           path: |
@@ -18,14 +19,27 @@ jobs:
           python-version: '3.11'
       - name: Install PlatformIO Core
         run: pip install --upgrade platformio
-      - name: Build PlatformIO Project
-        run: pio run
       - name: Set current date
         run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-      - name: Archive production artifact
+      - name: Build Passthrough 
+        run: |
+          cd passthrough
+          pio run
+      - name: Archive Passthrough artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.DATE }}-firmware
+          name: ${{ env.DATE }}-passthrough-firmware
           path: |
-            .pio/build/esp32dev/firmware.bin
-            .pio/build/esp32dev/firmware.elf
+            passthrough/.pio/build/passthrough/firmware.bin
+            passthrough/.pio/build/passthrough/firmware.elf
+      - name: Build RC DIY 
+        run: |
+          cd rc_diy
+          pio run
+      - name: Archive RC DIY artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.DATE }}-rc_diy-firmware
+          path: |
+            rc_diy/.pio/build/rc_diy/firmware.bin
+            rc_diy/.pio/build/rc_diy/firmware.elf

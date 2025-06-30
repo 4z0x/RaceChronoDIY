@@ -8,6 +8,9 @@
 #define UBX_ID_NAV_DOP 0x04
 #define UBX_ID_NAV_PVT 0x07
 
+#define GPS_RX 22 //RX on GPS module
+#define GPS_TX 23 //TX on GPS module
+
 using namespace std;
 
 bool deviceConnected = false;
@@ -312,7 +315,7 @@ void ublox_enableNavDop()
 void configGPS()
 {
                                    //RX, TX
-  GPSSerial1.begin(9600, SERIAL_8N1, 22, 23);
+  GPSSerial1.begin(9600, SERIAL_8N1, GPS_RX, GPS_TX);
   Serial.println("[I] U-BLOX configuration starting");
   Serial.println("[I] Disabling NMEA messages");
   ublox_noNMEA();
@@ -322,7 +325,7 @@ void configGPS()
   delay(100);
   GPSSerial1.end();
   delay(100);
-  GPSSerial1.begin(115200, SERIAL_8N1, 22, 23);
+  GPSSerial1.begin(115200, SERIAL_8N1, GPS_RX, GPS_TX);
   Serial.println("[I] Changing frequency to 10Hz");
   ublox_changeFrequency();
   Serial.println("[I] Enabling NAV-PVT / NAV-DOP messages");
