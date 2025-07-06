@@ -28,9 +28,9 @@ jobs:
       - name: Collect firmware files Passthrough
         run: |
           mkdir -p artifacts/passthrough
-          cp .pio/build/passthrough/firmware.bin artifacts/passthrough/
-          cp .pio/build/passthrough/partitions.bin artifacts/passthrough/
-          cp .pio/build/passthrough/bootloader.bin artifacts/passthrough/
+          cp passthrough/.pio/build/passthrough/firmware.bin artifacts/passthrough/
+          cp passthrough/.pio/build/passthrough/partitions.bin artifacts/passthrough/
+          cp passthrough/.pio/build/passthrough/bootloader.bin artifacts/passthrough/
       - name: Build RC DIY 
         run: |
           cd rc_diy
@@ -38,9 +38,9 @@ jobs:
       - name: Collect firmware files RC DIY 
         run: |
           mkdir -p artifacts/rc_diy
-          cp .pio/build/rc_diy/firmware.bin artifacts/rc_diy/
-          cp .pio/build/rc_diy/partitions.bin artifacts/rc_diy/
-          cp .pio/build/rc_diy/bootloader.bin artifacts/rc_diy/
+          cp rc_diy/.pio/build/rc_diy/firmware.bin artifacts/rc_diy/
+          cp rc_diy/.pio/build/rc_diy/partitions.bin artifacts/rc_diy/
+          cp rc_diy/.pio/build/rc_diy/bootloader.bin artifacts/rc_diy/
       - name: Upload firmware as artifact
         uses: actions/upload-artifact@v4
         with:
