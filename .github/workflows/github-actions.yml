@@ -25,23 +25,23 @@ jobs:
         run: |
           cd passthrough
           pio run
-      - name: Archive Passthrough artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.DATE }}-passthrough-firmware
-          path: |
-            passthrough/.pio/build/passthrough/firmware.bin
-            passthrough/.pio/build/passthrough/partitions.bin
-            passthrough/.pio/build/passthrough/bootloader.bin
       - name: Build RC DIY 
         run: |
           cd rc_diy
           pio run
-      - name: Archive RC DIY artifact
+      - name: Collect firmware files
+        run: |
+          mkdir -p passthrough rc_diy
+          cp .pio/build/passthrough/firmware.bin passthrough/
+          cp .pio/build/passthrough/partitions.bin passthrough/
+          cp .pio/build/passthrough/bootloader.bin passthrough/
+          cp .pio/build/rc_diy/firmware.bin rc_diy/
+          cp .pio/build/rc_diy/partitions.bin rc_diy/
+          cp .pio/build/rc_diy/bootloader.bin rc_diy/
+      - name: Upload firmware as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ env.DATE }}-rc_diy-firmware
+          name: esp32-firmware
           path: |
-            rc_diy/.pio/build/rc_diy/firmware.bin
-            rc_diy/.pio/build/rc_diy/partitions.bin
-            rc_diy/.pio/build/rc_diy/bootloader.bin
+            passthrough/
+            rc_diy/
