@@ -31,6 +31,7 @@ jobs:
           name: ${{ env.DATE }}-passthrough-firmware
           path: |
             ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin
+            ~/.platformio/packages/framework-arduinoespressif32/tools/sdk/bin/bootloader_dio_40m.bin
             passthrough/.pio/build/passthrough/firmware.bin
             passthrough/.pio/build/passthrough/partitions.bin
             passthrough/.pio/build/passthrough/firmware.elf
@@ -44,6 +45,7 @@ jobs:
           name: ${{ env.DATE }}-rc_diy-firmware
           path: |
             ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin
+            ~/.platformio/packages/framework-arduinoespressif32/tools/sdk/bin/bootloader_dio_40m.bin
             rc_diy/.pio/build/rc_diy/firmware.bin
             rc_diy/.pio/build/passthrough/partitions.bin
             rc_diy/.pio/build/rc_diy/firmware.elf
