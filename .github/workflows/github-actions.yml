@@ -30,9 +30,9 @@ jobs:
         with:
           name: ${{ env.DATE }}-passthrough-firmware
           path: |
-            passthrough/.pio/build/passthrough/firmware.bin passthrough/firmware.bin
-            passthrough/.pio/build/passthrough/partitions.bin passthrough/partitions.bin
-            passthrough/.pio/build/passthrough/bootloader.bin passthrough/bootloader.bin
+            passthrough/.pio/build/passthrough/firmware.bin
+            passthrough/.pio/build/passthrough/partitions.bin
+            passthrough/.pio/build/passthrough/bootloader.bin
       - name: Build RC DIY 
         run: |
           cd rc_diy
@@ -42,6 +42,6 @@ jobs:
         with:
           name: ${{ env.DATE }}-rc_diy-firmware
           path: |
-            rc_diy/.pio/build/rc_diy/firmware.bin rc_diy/firmware.bin
-            rc_diy/.pio/build/rc_diy/partitions.bin rc_diy/partitions.bin
-            rc_diy/.pio/build/rc_diy/bootloader.bin rc_diy/bootloader.bin
+            rc_diy/.pio/build/rc_diy/firmware.bin
+            rc_diy/.pio/build/rc_diy/partitions.bin
+            rc_diy/.pio/build/rc_diy/bootloader.bin
