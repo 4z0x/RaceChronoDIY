@@ -31,6 +31,7 @@ jobs:
           name: ${{ env.DATE }}-passthrough-firmware
           path: |
             passthrough/.pio/build/passthrough/firmware.bin
+            passthrough/.pio/build/passthrough/partitions.bin
             passthrough/.pio/build/passthrough/firmware.elf
       - name: Build RC DIY 
         run: |
@@ -42,4 +43,5 @@ jobs:
           name: ${{ env.DATE }}-rc_diy-firmware
           path: |
             rc_diy/.pio/build/rc_diy/firmware.bin
+            rc_diy/.pio/build/passthrough/partitions.bin
             rc_diy/.pio/build/rc_diy/firmware.elf
