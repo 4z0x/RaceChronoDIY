@@ -1,16 +1,29 @@
-# RaceChronoDYI-TBeam
+# 🚀 Flashing Instructions
+## 📦 Firmware
+Download the firmware archive from the Releases section.
 
-Flash the Arduino sketch in `rc_dyi_tbeam/rc_dyi_tbeam.ino` to the `TTGO T-Beam ESP32 NEO-M8N` device.
+Extract the contents to a directory of your choice.
 
-Pair the device with your mobile phone running the RaceChrono App (blue led should blink differently when paired)
+## 🛠️ Esptool
+### Option 1: Precompiled Binary
+Download the appropriate [esptool](https://github.com/espressif/esptool/releases) release for your operating system.
 
-Enjoy!
+Extract its contents into the folder where you extracted the firmware.
 
-# Troubleshooting
-In case of issues, it is possible to use the `passthrough.ino` to interface the u-center program with the ublox chipset.
+### Option 2: Install via pip
+```bash
+pip install esptool
+```
 
-Suggested/Tested antennas:
-- 712-ANT-GPS-SH2-SMA (Mouser)
-- FXUB63 (TAOGlass)
+## 🔧 Flash the Device
+From the firmware directory, run the following command:
 
-Any PRs or issues are welcome
+```bash
+esptool.py --port "PORT" --baud 921600 write_flash -z \
+  0x1000 bootloader.bin \
+  0x8000 partitions.bin \
+  0xe000 boot_app0.bin \
+  0x10000 firmware.bin
+```
+
+<strong>Replace "PORT" with your actual serial port (/dev/ttyUSB* on Linux/macOS or COM* on Windows).</strong>
