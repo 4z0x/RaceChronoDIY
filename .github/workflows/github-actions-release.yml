@@ -1,6 +1,9 @@
 name: Create Release
 
 on:
+  push:
+    tags:
+    - '*'
   workflow_run:
     workflows: ["Build Firmware"]
     types:
@@ -21,8 +24,12 @@ jobs:
           name: ${{ env.DATE }}-${{ github.ref_name }}-firmware
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: actions/create-release@v1
         with:
           tag_name: ${{ env.DATE }}-${{ github.ref_name }}
+          release_name: Release ${{ env.DATE }}-${{ github.ref_name }}
+          body_path: ./release_notes.md
+          draft: false
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
