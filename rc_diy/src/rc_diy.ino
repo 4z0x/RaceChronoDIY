@@ -34,7 +34,7 @@ BLEServer *BLE_server = NULL;
 BLECharacteristic *BLE_GPS_Main_Characteristic = NULL; //RaceChrono GPS Main characteristic UUID 0x03
 BLECharacteristic *BLE_GPS_Time_Characteristic = NULL; //RaceChrono GPS Time characteristic UUID 0x04
 
-String device_name = "RC_DYI_" + String((uint16_t)((uint64_t)ESP.getEfuseMac() >> 32));
+String device_name = "RC_DIY_" + String((uint16_t)((uint64_t)ESP.getEfuseMac() >> 32));
 
 struct ublox
 {
