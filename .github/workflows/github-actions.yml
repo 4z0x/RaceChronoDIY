@@ -1,0 +1,100 @@
+name: Build Firmware
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    outputs:
+      date: ${{ steps.set_date.outputs.date }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/pip
+            ~/.platformio/.cache
+          key: ${{ runner.os }}-pio
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install PlatformIO Core
+        run: pip install --upgrade platformio
+
+      - name: Set current date
+        id: set_date
+        run: echo "date=$(date +'%Y%m%d')" >> $GITHUB_OUTPUT
+
+      - name: Build Passthrough
+        run: |
+          cd passthrough
+          pio run
+
+      - name: Collect firmware files Passthrough
+        run: |
+          mkdir -p artifacts/passthrough
+          cp passthrough/.pio/build/passthrough/firmware.bin artifacts/passthrough/
+          cp passthrough/.pio/build/passthrough/partitions.bin artifacts/passthrough/
+          cp passthrough/.pio/build/passthrough/bootloader.bin artifacts/passthrough/
+          cp ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin artifacts/passthrough/
+
+      - name: Build RC DIY
+        run: |
+          cd rc_diy
+          pio run
+
+      - name: Collect firmware files RC DIY
+        run: |
+          mkdir -p artifacts/rc_diy
+          cp rc_diy/.pio/build/rc_diy/firmware.bin artifacts/rc_diy/
+          cp rc_diy/.pio/build/rc_diy/partitions.bin artifacts/rc_diy/
+          cp rc_diy/.pio/build/rc_diy/bootloader.bin artifacts/rc_diy/
+          cp ~/.platformio/packages/framework-arduinoespressif32/tools/partitions/boot_app0.bin artifacts/rc_diy/
+
+      - name: Upload firmware as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set_date.outputs.date }}-${{ github.ref_name }}
+          path: artifacts/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{ needs.build.outputs.date }}-${{ github.ref_name }}
+          path: artifacts/
+
+      - name: Recreate release archive
+        run: |
+          zip -r ${{ needs.build.outputs.date }}-${{ github.ref_name }}.zip artifacts
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ needs.build.outputs.date }}-${{ github.ref_name }}
+          release_name: Release ${{ needs.build.outputs.date }}-${{ github.ref_name }}
+          draft: false
+          prerelease: false
+
+      - name: Upload firmware archive to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ${{ needs.build.outputs.date }}-${{ github.ref_name }}.zip
+          asset_name: ${{ needs.build.outputs.date }}-${{ github.ref_name }}.zip
+          asset_content_type: application/zip
