@@ -1,9 +1,6 @@
 name: Create Release
 
 on:
-  push:
-    tags:
-    - '*'
   workflow_run:
     workflows: ["Build Firmware"]
     types:
