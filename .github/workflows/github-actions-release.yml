@@ -28,7 +28,6 @@ jobs:
         with:
           tag_name: ${{ env.DATE }}-${{ github.ref_name }}
           release_name: Release ${{ env.DATE }}-${{ github.ref_name }}
-          body_path: ./release_notes.md
           draft: false
           prerelease: false
         env:
